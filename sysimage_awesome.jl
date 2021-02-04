@@ -2,11 +2,11 @@ import Pkg;
 installed_pkgs = Pkg.installed()
 function add_pkg(name; kw...)
         !(haskey(installed_pkgs, name) && (!(:version in keys(kw)) || installed_pkgs[name] == kw[:version])) && Pkg.add(Pkg.PackageSpec(;name=name, kw...))
-end 
+end
 add_pkg("Revise")
-add_pkg("Flux", version=v"0.11.0")
+add_pkg("Flux")
 add_pkg("BenchmarkTools")
-add_pkg("Zygote", version=v"0.5.3")
+add_pkg("Zygote")
 add_pkg("Distributions")
 add_pkg("OhMyREPL")
 add_pkg("EllipsisNotation")
@@ -18,11 +18,13 @@ add_pkg("LightGraphs")
 add_pkg("GraphPlot")
 add_pkg("Plots")
 add_pkg("PackageCompiler")
+add_pkg("Statistics")
+add_pkg("ImageTransformations")
 # SymbolServer
 using PackageCompiler
 @show "Build starting..."
 
-create_sysimage([:Revise, :JuliaFormatter, 
+create_sysimage([:Revise, :JuliaFormatter,
                 # :Juno, :Atom,
                 :LanguageServer, # :SymbolServer, :CSTParser, :StaticLint, :DocumentFormat,
                 :PackageCompiler,
@@ -31,9 +33,11 @@ create_sysimage([:Revise, :JuliaFormatter,
                 :OhMyREPL,
                 :Plots,
                 :Flux, :Zygote,
+                :Statistics, :ImageTransformations,
                 # :Colors
                 ];
-        replace_default=true,
+        # replace_default=true,
+        sysimage_path="/home/lab/stash/JuliaImages/julia-awesomeness/210204_precompilation.so",
         precompile_execution_file="precompile.jl")
 # to time julia startup: time julia  -e ''
 # default img: julia -e ''  0.15s user 0.09s system 78% cpu 0.306 total
